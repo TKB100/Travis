@@ -7,14 +7,23 @@ SECONDS = 3
 NUM_SAMPLES = SAMPLE_RATE * SECONDS
 model = WhisperModel("small.en", device="cpu", compute_type="int8")
 
-print("Recording now.....")
-recording = sd.rec(NUM_SAMPLES, samplerate=SAMPLE_RATE, channels=1)
-sd.wait()
-loudness = np.abs(recording).max()
-print("Recording is done.")
-audio = recording.flatten()
-segments, info = model.transcribe(audio)
-for segment in segments:
-    print(segment.text)
+
+def listening():
+    print("Recording now.....")
+    recording = sd.rec(NUM_SAMPLES, samplerate=SAMPLE_RATE, channels=1)
+    sd.wait()
+    loudness = np.abs(recording).max()
+    print("Recording is done.")
+    audio = recording.flatten()
+    segments, info = model.transcribe(audio)
+
+    text = ""
+    for segment in segments:
+        text += segment.text
+
+    return text.strip()
+
+result = listening()
+print("You said:", result)
 
 
