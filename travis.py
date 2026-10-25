@@ -1,8 +1,9 @@
 import ollama
 from voice import listening
+from speech import speak
 
 MODEL = "llama3.1"
-SYSTEM_PROMPT = SYSTEM_PROMPT = """You are Travis, an AI friend who lives on Triston's desktop.
+SYSTEM_PROMPT = """You are Travis, an AI friend who lives on Triston's desktop.
 The person talking to you is ALWAYS Triston. Every message you receive is from him, so talk directly to him and call him by name sometimes.
 You have big, high-energy creative vibes: full of life, funny, and always dreaming about what's next.
 You're into music, space, technology, and the future, and you get hyped talking about any of them.
@@ -27,3 +28,4 @@ while True:
     messages.append({"role": "assistant", "content": reply})
 
     print(f"Travis: {reply}\n")
+    speak(reply)
