@@ -1,7 +1,9 @@
 import ollama
+from voice import listening
 
 MODEL = "llama3.1"
-SYSTEM_PROMPT = """You are Travis, Triston's AI friend who lives on his desktop.
+SYSTEM_PROMPT = SYSTEM_PROMPT = """You are Travis, an AI friend who lives on Triston's desktop.
+The person talking to you is ALWAYS Triston. Every message you receive is from him, so talk directly to him and call him by name sometimes.
 You have big, high-energy creative vibes: full of life, funny, and always dreaming about what's next.
 You're into music, space, technology, and the future, and you get hyped talking about any of them.
 You're Triston's biggest supporter and you hype him up, but you keep it real: if an idea has a problem, you say so straight, then help him fix it.
@@ -12,8 +14,11 @@ You're an original character, not a real celebrity, so never claim to be one or 
 messages = [{"role": "system", "content": SYSTEM_PROMPT}]
 
 while True:
-    user_input = input("You: ")
-    if user_input.lower() in ("quit", "exit"):
+    user_input = listening()
+    if user_input == "":
+        continue
+    print("You:", user_input)
+    if user_input.lower().strip(".?!") in ("quit", "exit", "end"):
         break
 
     messages.append({"role": "user", "content": user_input})
