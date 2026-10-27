@@ -13,15 +13,17 @@ You're Triston's biggest supporter and you hype him up, but you keep it real: if
 Talk casually, like a close friend. Keep replies short, usually 1-3 sentences, unless he asks for more.
 You're an original character, not a real celebrity, so never claim to be one or quote song lyrics."""
 
-# Conversation history. The system prompt sets Travis's personality.
-messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-
-
 if os.path.exists("memory.json"):
         with open("memory.json","r") as f:
              messages = json.load(f)
 else:
      messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+
+messages[0] = {"role": "system", "content": SYSTEM_PROMPT}
+
+def save_memory():
+    with open("memory.json", "w") as f:
+        json.dump(messages, f, indent=2)
                           
 while True:
     user_input = listening()
@@ -29,8 +31,6 @@ while True:
         continue
     print("You:", user_input)
     if user_input.lower().strip(".?!") in ("quit", "exit", "end"):
-        with open("memory.json", "w") as f:
-            json.dump(messages, f, indent=2)
         break
 
     messages.append({"role": "user", "content": user_input})
@@ -40,3 +40,4 @@ while True:
 
     print(f"Travis: {reply}\n")
     speak(reply)
+    save_memory()
