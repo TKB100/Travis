@@ -1,6 +1,8 @@
 import ollama
 from voice import listening
 from speech import speak
+import json
+import os
 
 MODEL = "llama3.1"
 SYSTEM_PROMPT = """You are Travis, an AI friend who lives on Triston's desktop.
@@ -14,12 +16,21 @@ You're an original character, not a real celebrity, so never claim to be one or 
 # Conversation history. The system prompt sets Travis's personality.
 messages = [{"role": "system", "content": SYSTEM_PROMPT}]
 
+
+if os.path.exists("memory.json"):
+        with open("memory.json","r") as f:
+             messages = json.load(f)
+else:
+     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+                          
 while True:
     user_input = listening()
     if user_input == "":
         continue
     print("You:", user_input)
     if user_input.lower().strip(".?!") in ("quit", "exit", "end"):
+        with open("memory.json", "w") as f:
+            json.dump(messages, f, indent=2)
         break
 
     messages.append({"role": "user", "content": user_input})
